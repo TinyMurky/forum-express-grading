@@ -27,4 +27,18 @@ const getCommentedRests = targetUser => {
   }
 }
 
-module.exports = { uniqBy, getCommentedRests }
+const getNonRepeatM2M = (targetUser, key) => {
+  if (targetUser[key]) { // 有Comment才回傳，不然回傳空array
+    return uniqBy(
+      targetUser[key] // 用set 去除相同的restaurant
+        .filter(item => item) // 如果不明原因不見key的內容，會撈到null，先filter null
+        .map(item => {
+          return item.toJSON()
+        }),
+      item => item.id
+    )
+  } else {
+    return []
+  }
+}
+module.exports = { uniqBy, getCommentedRests, getNonRepeatM2M }

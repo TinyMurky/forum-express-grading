@@ -6,7 +6,13 @@
         </div>
         <div class="col-lg-8 col-md-6 col-4">
             <h1 class="user-name">{{user.name}}</h1>
-            <p>{{user.email}}</p>
+            <p >{{user.email}}</p>
+            <div class="mb-3">
+                <p class="my-0 py-0"><strong>{{countElement commentedRests}}</strong> 已評論餐廳</p>
+                <p class="my-0 py-0"><strong>{{countElement favoritedRests}}</strong> 收藏的餐廳</p>
+                <p class="my-0 py-0"><strong>{{countElement followings}}</strong> followings (追蹤者)</p>
+                <p class="my-0 py-0"><strong>{{countElement followers}}</strong> followers (追隨者)</p>
+            </div>
             {{#ifCond user.id loginUser.id}}
             {{!-- 要一樣id才會顯示edit --}}
                 <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
@@ -15,24 +21,80 @@
     </div>
 </div>
 
-
-<div class="container rounded mb-5 p-0" style="box-shadow: 1px 1px 5px 2px #eee">
-    <div class="card border-0">
-        <div class="card-header">
-            {{countElement restaurants}} 已評論餐廳
-        </div>
-        <div class="card-body">
-            <div class="row">
-            {{#each restaurants}}
-                <div class="card col-lg-1 col-md-auto col-auto p-0 m-1" >
-                        <a href="/restaurants/{{this.id}}">
-                        <img src="{{this.image}}" class="card-img-top" >
-                        <div class="card-body p-1">
-                            <p class="card-text fs-6">{{this.name}}</p>
-                        </div>
-                    </a>
+<div class="container row px-0">
+    <div class="container g-col-3 col-md-4 col-12">
+        <div class="container rounded mb-3 p-0" style="box-shadow: 1px 1px 5px 2px #eee">
+            <div class="card border-0">
+                <div class="card-header">
+                    {{countElement followings}} followings (追蹤者)
                 </div>
-            {{/each}}
+                <div class="card-body">
+                    <div class="row">
+                    {{#each followings}}
+                        <div class="card col-md-2 col-12 p-0 m-1" >
+                            <a href="/users/{{this.id}}">
+                                <img src="{{this.image}}" class="card-img-top" >
+                            </a>
+                        </div>
+                    {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container rounded mb-1 p-0" style="box-shadow: 1px 1px 5px 2px #eee">
+            <div class="card border-0">
+                <div class="card-header">
+                    {{countElement followers}} followers (追隨者)
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    {{#each followers}}
+                        <div class="card col-md-2 col-12 p-0 m-1" >
+                            <a href="/users/{{this.id}}">
+                                <img src="{{this.image}}" class="card-img-top" >
+                            </a>
+                        </div>
+                    {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container col-md-8 col-12 px-0">
+        <div class="container rounded mb-3 p-0" style="box-shadow: 1px 1px 5px 2px #eee">
+            <div class="card border-0">
+                <div class="card-header">
+                    {{countElement commentedRests}} 已評論餐廳
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    {{#each commentedRests}}
+                        <div class="card col-lg-1 col-md-auto col-auto p-0 m-1" >
+                            <a href="/restaurants/{{this.id}}">
+                                <img src="{{this.image}}" class="card-img-top" >
+                            </a>
+                        </div>
+                    {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container rounded mb-1 p-0" style="box-shadow: 1px 1px 5px 2px #eee">
+            <div class="card border-0">
+                <div class="card-header">
+                    {{countElement favoritedRests}} 收藏的餐廳
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    {{#each favoritedRests}}
+                        <div class="card col-lg-1 col-md-auto col-auto p-0 m-1" >
+                            <a href="/restaurants/{{this.id}}">
+                                <img src="{{this.image}}" class="card-img-top" >
+                            </a>
+                        </div>
+                    {{/each}}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

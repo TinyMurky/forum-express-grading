@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const { RegisterError, UserCRUDError, FavoriteError, LikeError, FollowError } = require('../errors/errors')
 const { User, Comment, Restaurant, Favorite, Like, Followship } = require('../models') // 用解構付值把db內的User model拿出來
 const { imgurFileHandler } = require('../helpers/file-helper')
-const { getCommentedRests } = require('../helpers/user-helper')
+const { getCommentedRests, getNonRepeatM2M } = require('../helpers/user-helper')
 
 const userController = {
   signUpPage: (req, res) => {
@@ -63,21 +63,33 @@ const userController = {
       const targetUser = await User.findByPk(id,
         {
           nest: true,
-          include: [{
-            model: Comment,
-            include: Restaurant
-          }]
+          include: [
+            { model: Comment, include: Restaurant },
+            { model: Restaurant, as: 'FavoritedRestaurants' },
+            { model: User, as: 'Followers' },
+            { model: User, as: 'Followings' }
+          ]
         }
       )
       if (!targetUser) throw new UserCRUDError('User did not exist!')
 
       /* 找出所有評論過得清單 */
       const commentedRests = getCommentedRests(targetUser)
+      const favoritedRests = getNonRepeatM2M(targetUser, 'FavoritedRestaurants')
+      const followers = getNonRepeatM2M(targetUser, 'Followers')
+      const followings = getNonRepeatM2M(targetUser, 'Followings')
+
+      console.log('FR:', favoritedRests)
+      console.log('follower:', followers)
+      console.log('followings', followings)
 
       return res.render('users/profile', {
         user: targetUser.toJSON(),
         loginUser: req.user, // 如果user和loginUser不一樣就不顯示edit
-        restaurants: commentedRests
+        commentedRests,
+        favoritedRests,
+        followers,
+        followings
       })
     } catch (error) {
       return next(error)
