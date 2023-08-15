@@ -7,3 +7,5 @@ upload/
 /SQL_Script
 .DS_Store
 .env
+
+request.js
